@@ -55,7 +55,7 @@ main :: proc() {
 
 		camera := init_camera(&player)
 		rl.BeginDrawing()
-		rl.ClearBackground(rl.SKYBLUE)
+		rl.ClearBackground(rl.DARKBLUE)
 		rl.BeginMode3D(camera)
 		init_game()
 		player_render(&player)
@@ -186,4 +186,22 @@ spawning_islands :: proc() {
 
 spawning_loot :: proc() {
 
+}
+
+load_custom_material :: proc() {
+	// Load the textures
+	diffuseTexture := rl.LoadTexture(
+		"assets/blue_metal_plate_1k.gltf/textures/blue_metal_plate_arm_1k.jpg",
+	)
+	specularTexture := rl.LoadTexture("path/to/specular.png")
+	normalTexture := rl.LoadTexture("path/to/normal.png")
+
+	// Create a material and assign the textures
+	material := rl.LoadMaterialDefault()
+	material.maps[rl.MaterialMap].Texture = diffuseTexture
+	material.Maps[raylib.MATERIAL_MAP_SPECULAR].Texture = specularTexture
+	material.Maps[raylib.MATERIAL_MAP_NORMAL].Texture = normalTexture
+
+	// Define the cube's mesh
+	cubeMesh := rl.GenMeshCube(1.0, 1.0, 1.0)
 }

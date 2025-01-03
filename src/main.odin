@@ -15,6 +15,8 @@ Player :: struct {
 	direction: MovableDirection,
 	healt:     int,
 	inventory: Inventory,
+	gold:      int,
+	power:     int,
 }
 
 MovableDirection :: enum {
@@ -43,6 +45,8 @@ main :: proc() {
 		direction = .East,
 		healt     = 100,
 		inventory = Inventory{},
+		gold      = 1,
+		power     = 100,
 	}
 
 	for !rl.WindowShouldClose() {
@@ -58,22 +62,33 @@ main :: proc() {
 
 		rl.EndMode3D()
 
-		coordText := fmt.aprintf(
-			"x: %.2f, y: %.2f, z: %.2f",
-			player.position.x,
-			player.position.y,
-			player.position.z,
-		)
-
-		coords: cstring = fmt.caprintf(coordText)
-
-
+		screen_text := format_screen_text(&player)
 		//	rl.DrawFPS(10, 10)
-		rl.DrawText(coords, 10, 10, 10, rl.BLACK)
+		rl.DrawText(screen_text["coords"], 10, 10, 10, rl.BLACK)
+		rl.DrawText(screen_text["gold"], 10, 30, 30, rl.GOLD)
 
 		rl.EndDrawing()
 
 	}
+}
+format_screen_text :: proc(player: ^Player) -> map[string]cstring {
+	screen_text := make(map[string]cstring)
+
+	coord_text := fmt.aprintf(
+		"x: %.2f, y: %.2f, z: %.2f",
+		player.position.x,
+		player.position.y,
+		player.position.z,
+	)
+
+	coords: cstring = fmt.caprintf(coord_text)
+	gold: cstring = fmt.ctprint(player.gold)
+
+
+	screen_text["coords"] = coords
+	screen_text["gold"] = gold
+
+	return screen_text
 }
 
 player_render :: proc(player: ^Player) {
@@ -118,7 +133,7 @@ init_camera :: proc(player: ^Player) -> rl.Camera3D {
 		position = cameraPosition,
 		target   = player.position,
 		up       = rl.Vector3{0.0, 1.0, 0.0},
-		fovy     = 85.0,
+		fovy     = 95.0,
 		//	projection = .ORTHOGRAPHIC,
 	}
 
@@ -128,11 +143,11 @@ init_camera :: proc(player: ^Player) -> rl.Camera3D {
 get_input_vec :: proc() -> rl.Vector3 {
 	input := rl.Vector3{}
 
-	if rl.IsKeyDown(.A) {
+	if rl.IsKeyDown(.A) || rl.IsKeyDown(.LEFT) {
 		input.x = -1
 	}
 
-	if rl.IsKeyDown(.D) {
+	if rl.IsKeyDown(.D) || rl.IsKeyDown(.RIGHT) {
 		input.x = 1
 	}
 
@@ -144,11 +159,11 @@ get_input_vec :: proc() -> rl.Vector3 {
 		input.y = -1
 	}
 
-	if rl.IsKeyDown(.S) {
+	if rl.IsKeyDown(.S) || rl.IsKeyDown(.DOWN) {
 		input.z = +1
 	}
 
-	if rl.IsKeyDown(.W) {
+	if rl.IsKeyDown(.W) || rl.IsKeyDown(.UP) {
 		input.z = -1
 	}
 
@@ -162,5 +177,13 @@ get_input_vec :: proc() -> rl.Vector3 {
 
 init_game :: proc() {
 	rl.DrawCube(rl.Vector3{0, 0, 0}, 1.0, 2.0, 1.0, rl.BROWN)
+
+}
+
+spawning_islands :: proc() {
+
+}
+
+spawning_loot :: proc() {
 
 }

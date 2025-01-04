@@ -8,7 +8,7 @@ all: run
 
 .PHONY: build
 build:
-	$(ODIN) run  src/main.odin -file
+	$(ODIN) run  src/main/main.odin -file
 
 
 .PHONY: run

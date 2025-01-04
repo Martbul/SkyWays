@@ -18,22 +18,19 @@ init_custom_material :: proc() {
 		return
 	}
 
-	// Create cube mesh and model
 	mesh := rl.GenMeshCube(1.0, 1.0, 1.0)
 	textured_cube.model = rl.LoadModelFromMesh(mesh)
 
-	// Load textures once
 	textured_cube.specular_texture = rl.LoadTexture(
-		"assets/blue_metal_plate_1k.gltf/textures/blue_metal_plate_arm_1k.jpg",
+		"assets/textures/blue_metal_plate_1k.gltf/textures/blue_metal_plate_arm_1k.jpg",
 	)
 	textured_cube.diffuse_texture = rl.LoadTexture(
-		"assets/blue_metal_plate_1k.gltf/textures/blue_metal_plate_diff_1k.jpg",
+		"assets/textures/blue_metal_plate_1k.gltf/textures/blue_metal_plate_diff_1k.jpg",
 	)
 	textured_cube.normal_texture = rl.LoadTexture(
-		"assets/blue_metal_plate_1k.gltf/textures/blue_metal_plate_nor_gl_1k.jpg",
+		"assets/textures/blue_metal_plate_1k.gltf/textures/blue_metal_plate_nor_gl_1k.jpg",
 	)
 
-	// Get material reference and assign textures
 	material := &textured_cube.model.materials[0]
 	material.maps[MAP_DIFFUSE].texture = textured_cube.diffuse_texture
 	material.maps[MAP_SPECULAR].texture = textured_cube.specular_texture
@@ -42,7 +39,6 @@ init_custom_material :: proc() {
 	textured_cube.is_loaded = true
 }
 
-// New cleanup function - call this when closing your game
 cleanup_custom_material :: proc() {
 	if textured_cube.is_loaded {
 		rl.UnloadModel(textured_cube.model)
@@ -55,6 +51,6 @@ cleanup_custom_material :: proc() {
 
 draw_custom_material :: proc() {
 	if textured_cube.is_loaded {
-		rl.DrawModel(textured_cube.model, 10, 10, rl.WHITE)
+		rl.DrawModel(textured_cube.model, 2, 2, rl.WHITE)
 	}
 }

@@ -10,12 +10,26 @@ TerrainInstance :: struct {
 	bounds:     rl.BoundingBox,
 }
 
-TerrainType :: enum {
+ConcreteTerrainType :: enum {
+	ConcreteCube,
+	ConcreteIslandPlatform,
+	ConcreteFormation,
+	ConcreteWall,
+	ConcretePillar,
+}
+
+
+RockyTerrainType :: enum {
 	RockyCube,
 	IslandPlatform,
 	RockFormation,
 	CliffWall,
 	TerrainPillar,
+}
+
+TerrainType :: union {
+	RockyTerrainType,
+	ConcreteTerrainType,
 }
 
 Terrain_instances: [dynamic]TerrainInstance

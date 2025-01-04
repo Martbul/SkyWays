@@ -4,8 +4,8 @@ import pl "../player"
 import rl "vendor:raylib"
 
 init_camera :: proc(player: ^pl.Player) -> rl.Camera3D {
-	cameraDistance: f32 = 5.0
-	cameraHeight: f32 = 2.0
+	cameraDistance: f32 = 6.0
+	cameraHeight: f32 = 9.5
 
 	rotationAngle := f32(rl.PI * -2)
 
@@ -27,10 +27,11 @@ init_camera :: proc(player: ^pl.Player) -> rl.Camera3D {
 
 	cameraTarget := rl.Vector3Transform(player.position, rotationMatrix)
 	camera := rl.Camera3D {
-		position = cameraPosition,
-		target   = player.position,
-		up       = rl.Vector3{0.0, 1.0, 0.0},
-		fovy     = 95.0,
+		position   = cameraPosition,
+		target     = player.position,
+		up         = rl.Vector3{0.0, 1.0, 0.0},
+		fovy       = 95.0,
+		projection = .PERSPECTIVE,
 	}
 
 	return camera

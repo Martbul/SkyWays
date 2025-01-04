@@ -1,8 +1,9 @@
 package main
 
 import "core:fmt"
+import perf "performance"
+import "textures"
 import rl "vendor:raylib"
-
 
 SCREEN_WIDTH :: 1300
 SCREEN_HEIGHT :: 850
@@ -39,6 +40,10 @@ Item :: struct {}
 main :: proc() {
 	rl.InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "SkyWays")
 	defer rl.CloseWindow()
+	perf.init_performance_tracking()
+	// Initialize the textured cube once
+	textures.init_custom_material()
+	defer textures.cleanup_custom_material()
 
 	player := Player {
 		position  = rl.Vector3{0, 0, 0},
@@ -52,23 +57,23 @@ main :: proc() {
 	for !rl.WindowShouldClose() {
 		player_update(&player)
 
-
 		camera := init_camera(&player)
 		rl.BeginDrawing()
 		rl.ClearBackground(rl.DARKBLUE)
 		rl.BeginMode3D(camera)
+
 		init_game()
 		player_render(&player)
+		textures.draw_custom_material()
 
 		rl.EndMode3D()
 
 		screen_text := format_screen_text(&player)
-		//	rl.DrawFPS(10, 10)
 		rl.DrawText(screen_text["coords"], 10, 10, 10, rl.BLACK)
 		rl.DrawText(screen_text["gold"], 10, 30, 30, rl.GOLD)
-
+		perf.update_performance_stats()
+		perf.draw_performance_overlay()
 		rl.EndDrawing()
-
 	}
 }
 format_screen_text :: proc(player: ^Player) -> map[string]cstring {
@@ -186,22 +191,4 @@ spawning_islands :: proc() {
 
 spawning_loot :: proc() {
 
-}
-
-load_custom_material :: proc() {
-	// Load the textures
-	diffuseTexture := rl.LoadTexture(
-		"assets/blue_metal_plate_1k.gltf/textures/blue_metal_plate_arm_1k.jpg",
-	)
-	specularTexture := rl.LoadTexture("path/to/specular.png")
-	normalTexture := rl.LoadTexture("path/to/normal.png")
-
-	// Create a material and assign the textures
-	material := rl.LoadMaterialDefault()
-	material.maps[rl.MaterialMap].Texture = diffuseTexture
-	material.Maps[raylib.MATERIAL_MAP_SPECULAR].Texture = specularTexture
-	material.Maps[raylib.MATERIAL_MAP_NORMAL].Texture = normalTexture
-
-	// Define the cube's mesh
-	cubeMesh := rl.GenMeshCube(1.0, 1.0, 1.0)
 }

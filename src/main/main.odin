@@ -36,13 +36,13 @@ main :: proc() {
 
 		tgen.init_terrain_instances()
 		pl.player_render(&player)
+
 		draw_game(&player)
 
-		//	pl.handle_inventory_input(&player)
 		rl.EndMode3D()
-
 		screen_text := pkg.format_screen_text(&player)
-
+		pl.handle_inventory_input(&player)
+		pl.draw_inventory(player.inventory)
 		rl.DrawText(screen_text["coords"], 10, 10, 10, rl.BLACK)
 		rl.DrawText(screen_text["gold"], 10, 30, 30, rl.GOLD)
 
@@ -60,13 +60,13 @@ init_game :: proc() -> pl.Player {
 	textures.init_concrete_elements()
 
 	player := pl.init_player()
+
 	return player
 }
 
 
 draw_game :: proc(player: ^pl.Player) {
 	textures.draw_custom_material()
-	pl.draw_inventory(player.inventory)
 	for instance in shared.Terrain_instances {
 		log.info(instance)
 		switch instance.model_type {

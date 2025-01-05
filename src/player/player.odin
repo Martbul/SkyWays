@@ -12,7 +12,7 @@ JUMP_FORCE: f32 = 5.0
 PLAYER_SPEED: f32 = 5.0
 GRAVITY: f32 = 9.8
 MODEL_PATH :: "assets/models/player4.obj"
-MODEL_ANIMATION :: "assets/models/player5.gltf"
+MODEL_ANIMATION :: "assets/models/walking.mtl"
 AIR_RESISTANCE: f32 = 0.1 // Adjust for desired air resistance effect
 Player :: struct {
 	position:          rl.Vector3,
@@ -50,6 +50,7 @@ init_player :: proc() -> Player {
 		power             = 100,
 		model_loaded      = false,
 		animation_loaded  = false,
+		inventory         = init_inventory(),
 	}
 
 	player.model = rl.LoadModel(MODEL_PATH)

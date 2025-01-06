@@ -7,13 +7,16 @@ import "core:fmt"
 import "core:log"
 import "core:math"
 import rl "vendor:raylib"
-TERMINAL_VELOCITY: f32 = -50.0 // Maximum downward speed
+
+
+TERMINAL_VELOCITY: f32 = -50.0
 JUMP_FORCE: f32 = 5.0
 PLAYER_SPEED: f32 = 5.0
 GRAVITY: f32 = 9.8
 MODEL_PATH :: "assets/models/player4.obj"
-MODEL_ANIMATION :: "assets/models/walking.mtl"
-AIR_RESISTANCE: f32 = 0.1 // Adjust for desired air resistance effect
+AIR_RESISTANCE: f32 = 0.1
+
+
 Player :: struct {
 	position:          rl.Vector3,
 	previous_position: rl.Vector3,
@@ -59,34 +62,22 @@ init_player :: proc() -> Player {
 		log.error("Failed to load model mesh from:", MODEL_PATH)
 	} else {
 		player.model_loaded = true
-		// Print details about each mesh
-		for i in 0 ..< int(player.model.meshCount) {
-			mesh := player.model.meshes[i]
-			fmt.println("Mesh", i, "vertices:", mesh.vertexCount)
-			fmt.println("Mesh", i, "triangles:", mesh.triangleCount)
-		}
 	}
 
-	// Load textures
 	diffuseTexture := rl.LoadTexture("assets/models/vanguard_diffuse1.png")
 	normalTexture := rl.LoadTexture("assets/models/vanguard_normal.png")
 
-	// Apply textures to the model's materials
 	for i in 0 ..< int(player.model.materialCount) {
 		player.model.materials[i].maps[textures.MAP_DIFFUSE].texture = diffuseTexture
 		player.model.materials[i].maps[textures.MAP_NORMAL].texture = normalTexture
 	}
 
-	// Load animations
 	anim_count: i32
 	anims := rl.LoadModelAnimations(MODEL_PATH, &anim_count)
-	fmt.println("\nAnimation count:", anim_count)
 
 	if anim_count > 0 && anims != nil {
 		player.animation = anims[0]
 		player.animation_loaded = true
-		fmt.println("Animation frames:", player.animation.frameCount)
-		fmt.println("Animation bone count:", player.animation.boneCount)
 	} else {
 		log.error("Failed to load animations from:", MODEL_PATH)
 	}
@@ -102,13 +93,13 @@ player_render :: proc(player: ^Player) {
 
 
 	delta_time := rl.GetFrameTime()
-	frames_per_second: f32 = 30.0 // Adjust this to match your animation's intended speed
+	frames_per_second: f32 = 30.0
+
 
 	model_pos := player.position
 	model_pos.y += 1.0
-	scale := rl.Vector3{0.020, 0.020, 0.020} // Adjust scale as needed
+	scale := rl.Vector3{0.020, 0.020, 0.020}
 
-	// Update rotation based on movement direction
 	if player.velocity.x != 0 || player.velocity.z != 0 {
 		// Calculate rotation angle from velocity
 		target_rotation := math.atan2(player.velocity.x, player.velocity.z)
@@ -136,7 +127,6 @@ player_render :: proc(player: ^Player) {
 		}
 	}
 
-	// Update animation frame
 	if player.animation_loaded {
 		is_moving := player.velocity.x != 0 || player.velocity.z != 0
 
@@ -161,7 +151,6 @@ player_render :: proc(player: ^Player) {
 		}
 	}
 
-	// Draw the model
 	rl.DrawModelEx(player.model, model_pos, rl.Vector3{0, 1, 0}, player.rotation, scale, rl.WHITE)
 }
 
@@ -187,37 +176,29 @@ player_update :: proc(player: ^Player) {
 
 	player.previous_position = player.position
 
-	// Apply gravity if not on the ground
 	if !player.is_on_ground {
 		player.velocity.y -= GRAVITY * deltaTime
 
-		// Clamp vertical velocity to terminal velocity
 		if player.velocity.y < TERMINAL_VELOCITY {
 			player.velocity.y = TERMINAL_VELOCITY
 		}
 	}
 
-	// Get input vector for movement
 	input := physics.get_input_vec()
 
-	// Update horizontal velocities based on input
 	player.velocity.x = input.x * PLAYER_SPEED
 	player.velocity.z = input.z * PLAYER_SPEED
 
-	// Apply air resistance to horizontal movement
 	player.velocity.x *= 1.0 - (AIR_RESISTANCE * deltaTime)
 	player.velocity.z *= 1.0 - (AIR_RESISTANCE * deltaTime)
 
-	// Handle jumping
 	if rl.IsKeyPressed(.SPACE) && player.is_on_ground {
 		player.velocity.y = JUMP_FORCE
 		player.is_on_ground = false
 	}
 
-	// Update player position based on velocity
 	player.position += player.velocity * deltaTime
 
-	// Check for collisions and update ground state
 	check_collisions(player)
 }
 
@@ -244,26 +225,6 @@ check_collisions :: proc(player: ^Player) {
 		}
 	}
 }
-
-//
-//check_collisions :: proc(player: ^Player) {
-//	player_box := get_player_bounds(player)
-
-// Reset ground state
-//	player.is_on_ground = false
-
-// Check collision with all terrain instances
-//	for instance in shared.Terrain_instances {
-//		obstacle_box := shared.get_transformed_bounding_box(instance)
-//		if rl.CheckCollisionBoxes(player_box, obstacle_box) {
-//			resolve_collision(player, obstacle_box)
-//			// If collision is resolved and player is on top of the obstacle, set is_on_ground to true
-//			if player.velocity.y <= 0 && player.position.y >= obstacle_box.max.y {
-//				player.is_on_ground = true
-//			}
-//		}
-//	}
-//}
 
 
 resolve_collision :: proc(player: ^Player, obstacle_box: rl.BoundingBox) {

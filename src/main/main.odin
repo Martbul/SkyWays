@@ -1,36 +1,48 @@
 package main
 
+import "../menu"
+import npc "../npcs"
 import perf "../performance"
 import "../pkg"
 import pl "../player"
 import "../shared"
 import tgen "../terrain_generation"
-import "../textures" // Add this import
+import "../textures"
 import "core:fmt"
 import "core:log"
 import rl "vendor:raylib"
 
-SCREEN_WIDTH :: 1300
-SCREEN_HEIGHT :: 850
-
+import "../constants"
 Game_State :: struct {
 	player:       pl.Player,
 	item_manager: ^pl.ItemManager,
 	pause:        bool,
+	npcs:         [dynamic]^npc.NPC,
+	menu:         menu.Menu,
 }
 
 main :: proc() {
-	rl.InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "SkyWays")
+	rl.InitWindow(constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT, "SkyWays")
 	game_state := init_game()
 
 	defer cleanup_game(&game_state)
 	defer rl.CloseWindow()
 
+	// Add menu loop
 	for !rl.WindowShouldClose() {
-		update_game(&game_state)
-		render_game(&game_state)
+		if game_state.menu.is_active {
+			if !menu.update_menu(&game_state.menu) {
+				game_state.menu.is_active = false
+				continue
+			}
+			menu.draw_menu(&game_state.menu)
+		} else {
+			update_game(&game_state)
+			render_game(&game_state)
+		}
 	}
 }
+
 
 init_game :: proc() -> Game_State {
 	perf.init_performance_tracking()
@@ -38,13 +50,13 @@ init_game :: proc() -> Game_State {
 	textures.init_terrain_elements()
 	textures.init_concrete_elements()
 
-	// Initialize game state
 	game_state := Game_State {
 		player       = pl.init_player(),
 		item_manager = pl.init_item_manager(),
 		pause        = false,
+		npcs         = make([dynamic]^npc.NPC),
+		menu         = menu.create_menu(), // Add this
 	}
-
 	// Load item resources
 	pl.load_item_resources(
 		game_state.item_manager,
@@ -53,8 +65,19 @@ init_game :: proc() -> Game_State {
 		"assets/wooden_axe/wooden_axe.png",
 	)
 
-	// Spawn some initial items for testing
+	// Initialize some example NPCs with patrol points
+	patrol_points := []rl.Vector3{{5, 0, 5}, {15, 0, 5}, {15, 0, 15}, {5, 0, 15}}
+
+	// Create and append NPCs to the game state
+	npc1 := npc.create_npc(
+		"assets/models/bots/spartan/scene.gltf",
+		rl.Vector3{5, 0, 5},
+		patrol_points,
+	)
+	append(&game_state.npcs, npc1)
+
 	pl.spawn_item(game_state.item_manager, "wooden_axe", {7, 2, 4})
+	pl.spawn_item(game_state.item_manager, "wooden_knife", {9, 2, 8})
 
 	return game_state
 }
@@ -65,13 +88,17 @@ update_game :: proc(game_state: ^Game_State) {
 	pl.player_update(&game_state.player)
 	pl.update(game_state.item_manager)
 
+	// Update all NPCs
+	for npcInGameState in game_state.npcs {
+		npc.update_npc(npcInGameState, game_state.player.position, rl.GetFrameTime())
+	}
+
 	// Handle item pickup
 	if rl.IsKeyPressed(.E) {
-		pickup_range := f32(2.0) // Adjust range as needed
+		pickup_range := f32(2.0)
 		picked_item := pl.pick_up_item(game_state.item_manager, &game_state.player, pickup_range)
 		if picked_item != nil {
 			// Add to player inventory or handle pickup
-			// You'll need to implement this based on your inventory system
 		}
 	}
 }
@@ -89,7 +116,12 @@ render_game :: proc(game_state: ^Game_State) {
 		tgen.init_terrain_instances()
 		pl.player_render(&game_state.player)
 		draw_game(&game_state.player)
-		pl.draw(game_state.item_manager) // Draw all items
+		pl.draw(game_state.item_manager)
+
+		// Draw all NPCs
+		for npcInGameState in game_state.npcs {
+			npc.draw_npc(npcInGameState)
+		}
 	}
 	rl.EndMode3D()
 
@@ -136,6 +168,14 @@ draw_game :: proc(player: ^pl.Player) {
 cleanup_game :: proc(game_state: ^Game_State) {
 	pl.unload_player(&game_state.player)
 	pl.unload_resources(game_state.item_manager)
+
+	// Cleanup NPCs
+	for npcInGameState in game_state.npcs {
+		npc.destroy_npc(npcInGameState)
+	}
+	delete(game_state.npcs)
+
 	textures.cleanup_custom_material()
 	textures.cleanup_terrain_elements()
+	menu.cleanup_menu(&game_state.menu)
 }

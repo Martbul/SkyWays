@@ -1,0 +1,226 @@
+{
+    "asset": {
+        "version": "2.0",
+        "generator": "Open Asset Import Library (assimp v5.2.0)"
+    },
+    "extensionsUsed": [
+        "KHR_materials_pbrSpecularGlossiness",
+        "FB_ngon_encoding"
+    ],
+    "accessors": [
+        {
+            "bufferView": 0,
+            "byteOffset": 0,
+            "componentType": 5126,
+            "count": 2675,
+            "type": "VEC3",
+            "max": [
+                0.012846441939473153,
+                0.06570485979318619,
+                0.839275062084198
+            ],
+            "min": [
+                -0.012846197001636029,
+                -0.057083677500486377,
+                -0.09618058800697327
+            ]
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 0,
+            "componentType": 5126,
+            "count": 2675,
+            "type": "VEC3",
+            "max": [
+                1.0,
+                0.9999960064888,
+                1.0
+            ],
+            "min": [
+                -1.0,
+                -0.9999149441719055,
+                -1.0
+            ]
+        },
+        {
+            "bufferView": 2,
+            "byteOffset": 0,
+            "componentType": 5126,
+            "count": 2675,
+            "type": "VEC2",
+            "max": [
+                0.9667883515357971,
+                0.9936603307723999
+            ],
+            "min": [
+                0.0327422171831131,
+                0.006339728832244873
+            ]
+        },
+        {
+            "bufferView": 3,
+            "byteOffset": 0,
+            "componentType": 5125,
+            "count": 12093,
+            "type": "SCALAR",
+            "max": [
+                2674
+            ],
+            "min": [
+                0
+            ]
+        }
+    ],
+    "buffers": [
+        {
+            "byteLength": 133972,
+            "uri": "dd70d896-b9e1-487e-93a4-2621aa1f116a.bin"
+        }
+    ],
+    "bufferViews": [
+        {
+            "buffer": 0,
+            "byteOffset": 0,
+            "byteLength": 32100,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 32100,
+            "byteLength": 32100,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 64200,
+            "byteLength": 21400,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 85600,
+            "byteLength": 48372,
+            "target": 34963
+        }
+    ],
+    "images": [
+        {
+            "uri": "textures/wooden_handle_saber_diff_1k.jpg"
+        },
+        {
+            "uri": "textures/wooden_handle_saber_nor_gl_1k.exr"
+        }
+    ],
+    "materials": [
+        {
+            "name": "wooden_handle_saber",
+            "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                    "index": 0
+                },
+                "baseColorFactor": [
+                    0.3085293769836426,
+                    0.3085293769836426,
+                    0.3085293769836426,
+                    1.0
+                ],
+                "metallicFactor": 0.0,
+                "roughnessFactor": 0.5
+            },
+            "normalTexture": {
+                "index": 1
+            },
+            "extensions": {
+                "KHR_materials_pbrSpecularGlossiness": {
+                    "diffuseFactor": [
+                        0.3085293769836426,
+                        0.3085293769836426,
+                        0.3085293769836426,
+                        1.0
+                    ],
+                    "specularFactor": [
+                        0.3085293769836426,
+                        0.3085293769836426,
+                        0.3085293769836426
+                    ],
+                    "glossinessFactor": 0.5,
+                    "diffuseTexture": {
+                        "index": 0
+                    }
+                }
+            }
+        }
+    ],
+    "meshes": [
+        {
+            "name": "Cylinder.001",
+            "primitives": [
+                {
+                    "extensions": {
+                        "FB_ngon_encoding": {}
+                    },
+                    "mode": 4,
+                    "material": 0,
+                    "indices": 3,
+                    "attributes": {
+                        "POSITION": 0,
+                        "NORMAL": 1,
+                        "TEXCOORD_0": 2
+                    }
+                }
+            ]
+        }
+    ],
+    "nodes": [
+        {
+            "name": "RootNode",
+            "children": [
+                1
+            ]
+        },
+        {
+            "name": "wooden_handle_saber",
+            "matrix": [
+                100.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                -0.000004371138857095502,
+                -100.0,
+                0.0,
+                0.0,
+                100.0,
+                -0.000004371138857095502,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "mesh": 0
+        }
+    ],
+    "samplers": [
+        {},
+        {}
+    ],
+    "scenes": [
+        {
+            "nodes": [
+                0
+            ]
+        }
+    ],
+    "textures": [
+        {
+            "source": 0,
+            "sampler": 0
+        },
+        {
+            "source": 1,
+            "sampler": 1
+        }
+    ],
+    "scene": 0
+}

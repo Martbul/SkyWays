@@ -5,7 +5,12 @@ import "core:math"
 import "core:strings"
 import rl "vendor:raylib"
 
-ItemID :: distinct string
+
+Inventory :: struct {
+	items:          [36]Item,
+	selected_index: int,
+	is_extended:    bool,
+}
 
 Item :: struct {
 	id:           ItemID,
@@ -22,6 +27,8 @@ Item :: struct {
 	time_offset:  f32,
 	on_pickup:    proc(_: ^ItemManager, _: ^Item),
 }
+
+ItemID :: distinct string
 
 ItemManager :: struct {
 	items:    [dynamic]^Item,
@@ -41,16 +48,12 @@ ability :: enum {
 	killer,
 }
 
-Inventory :: struct {
-	items:          [36]Item,
-	selected_index: int,
-	is_extended:    bool,
-}
-
 
 load_texture :: proc(file_path: string) -> rl.Texture2D {
 	return rl.LoadTexture(strings.clone_to_cstring(file_path))
 }
+
+
 init_inventory :: proc() -> Inventory {
 	inventory: Inventory
 	inventory.is_extended = false
@@ -64,19 +67,6 @@ init_inventory :: proc() -> Inventory {
 
 	return inventory
 }
-
-//init_inventory :: proc() -> Inventory {
-//	inventory: Inventory
-//	inventory.is_extended = false
-
-
-//	inventory.items[0] = Item {
-//		name     = "Wooden Axe",
-//		texture  = load_texture("assets/wooden_axe/wooden_axe.png"),
-//		quantity = 5,
-//	}
-//	return inventory
-//}
 
 
 handle_inventory_input :: proc(player: ^Player, item_manager: ^ItemManager) {
@@ -114,6 +104,10 @@ handle_inventory_input :: proc(player: ^Player, item_manager: ^ItemManager) {
 	if rl.IsKeyPressed(.FIVE) do player.inventory.selected_index = 4
 }
 
+hover_item_in_inventory :: proc() {
+
+}
+
 
 use_item :: proc(player: ^Player, item_index: int) {
 	if item_index >= len(player.inventory.items) {
@@ -134,7 +128,12 @@ use_item :: proc(player: ^Player, item_index: int) {
 		if item.quantity == 0 {
 			clear_item(item)
 		}
-	// Add other item types here
+	case "Wooden Axe":
+		item.quantity -= 1
+		// If quantity reaches 0, you might want to clear the item
+		if item.quantity == 0 {
+			clear_item(item)
+		}
 	}
 }
 
@@ -401,35 +400,6 @@ draw :: proc(manager: ^ItemManager) {
 		}
 	}
 }
-
-//pick_up_item :: proc(manager: ^ItemManager, player: ^Player, pickup_range: f32) -> ^Item {
-//	for item in manager.items {
-//		if item.state != .PickedUp {
-//			distance := rl.Vector3Distance(player.position, item.position)
-//			if distance <= pickup_range {
-//				item.state = .PickedUp
-//				if item.on_pickup != nil {
-//					item.on_pickup(manager, item)
-//
-//					// Find an empty slot in the inventory
-//					for i := 0; i < len(player.inventory.items); i += 1 {
-//						if player.inventory.items[i].quantity == 0 {
-//							fmt.print(item)
-//							log.info(item)
-//							// Copy item to inventory
-//							player.inventory.items[i] = item^
-//							player.inventory.items[i].quantity = 1
-///							break
-//						}
-//					}
-//				}
-//				return item
-//			}
-//		}
-//	}
-//	return nil
-//}
-
 
 pick_up_item :: proc(manager: ^ItemManager, player: ^Player, pickup_range: f32) -> ^Item {
 	for item in manager.items {

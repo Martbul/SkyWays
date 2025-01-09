@@ -1,5 +1,6 @@
 package player
 
+import "../constants"
 import "../physics"
 import "../shared"
 import "../textures"
@@ -68,8 +69,8 @@ init_player :: proc() -> Player {
 	normalTexture := rl.LoadTexture("assets/models/vanguard_normal.png")
 
 	for i in 0 ..< int(player.model.materialCount) {
-		player.model.materials[i].maps[textures.MAP_DIFFUSE].texture = diffuseTexture
-		player.model.materials[i].maps[textures.MAP_NORMAL].texture = normalTexture
+		player.model.materials[i].maps[constants.MAP_DIFFUSE].texture = diffuseTexture
+		player.model.materials[i].maps[constants.MAP_NORMAL].texture = normalTexture
 	}
 
 	anim_count: i32

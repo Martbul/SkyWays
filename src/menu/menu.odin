@@ -1,9 +1,11 @@
 package menu
 
-
 import "../constants"
+import "../pkg"
 import "core:fmt"
+import "core:log"
 import rl "vendor:raylib"
+
 Menu_State :: enum {
 	Main,
 	Options,
@@ -23,8 +25,8 @@ create_menu :: proc() -> Menu {
 	menu := Menu {
 		state = .Main,
 		selected_option = 0,
-		background = rl.LoadTexture("assets/menu/background.jpg"), // Create this texture
-		title_font = rl.LoadFont("assets/fonts/betteroutline/Better Outline.ttf"), // Create this font
+		background = rl.LoadTexture("assets/menu/background.jpg"),
+		title_font = rl.LoadFont("assets/fonts/betteroutline/Better Outline.ttf"),
 		button_rect = rl.Rectangle {
 			x = f32(constants.SCREEN_WIDTH / 2 - 100),
 			y = f32(constants.SCREEN_HEIGHT / 2 - 100),
@@ -33,6 +35,9 @@ create_menu :: proc() -> Menu {
 		},
 		is_active = true,
 	}
+
+	fmt.print("--------LOADED MENU")
+	pkg.debug("Creating NPC")
 	return menu
 }
 
@@ -53,6 +58,7 @@ update_menu :: proc(menu: ^Menu) -> bool {
 			}
 		}
 	}
+
 
 	return true // Continue showing menu
 }

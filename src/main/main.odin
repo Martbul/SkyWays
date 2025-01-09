@@ -1,5 +1,6 @@
 package main
 
+import "../constants"
 import "../menu"
 import npc "../npcs"
 import perf "../performance"
@@ -12,7 +13,6 @@ import "core:fmt"
 import "core:log"
 import rl "vendor:raylib"
 
-import "../constants"
 Game_State :: struct {
 	player:       pl.Player,
 	item_manager: ^pl.ItemManager,
@@ -24,14 +24,17 @@ Game_State :: struct {
 main :: proc() {
 	rl.InitWindow(constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT, "SkyWays")
 	game_state := init_game()
+	pkg.init()
+	defer pkg.destroy()
 
 	defer cleanup_game(&game_state)
+
 	defer rl.CloseWindow()
 
-	// Add menu loop
 	for !rl.WindowShouldClose() {
 		if game_state.menu.is_active {
 			if !menu.update_menu(&game_state.menu) {
+				fmt.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 				game_state.menu.is_active = false
 				continue
 			}
@@ -55,9 +58,9 @@ init_game :: proc() -> Game_State {
 		item_manager = pl.init_item_manager(),
 		pause        = false,
 		npcs         = make([dynamic]^npc.NPC),
-		menu         = menu.create_menu(), // Add this
+		menu         = menu.create_menu(),
 	}
-	// Load item resources
+
 	pl.load_item_resources(
 		game_state.item_manager,
 		"wooden_axe",

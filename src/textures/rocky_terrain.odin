@@ -1,4 +1,6 @@
 package textures
+
+import "../constants"
 import "core:fmt"
 import "core:strings"
 import rl "vendor:raylib"
@@ -90,9 +92,9 @@ init_textured_model :: proc(model: ^textured_model, mesh: rl.Mesh, texture_name:
 	model.normal_texture = rl.LoadTexture(strings.clone_to_cstring(normal_path))
 
 	material := &model.model.materials[0]
-	material.maps[MAP_DIFFUSE].texture = model.diffuse_texture
-	material.maps[MAP_SPECULAR].texture = model.specular_texture
-	material.maps[MAP_NORMAL].texture = model.normal_texture
+	material.maps[constants.MAP_DIFFUSE].texture = model.diffuse_texture
+	material.maps[constants.MAP_SPECULAR].texture = model.specular_texture
+	material.maps[constants.MAP_NORMAL].texture = model.normal_texture
 
 	model.bounding_box = rl.GetMeshBoundingBox(mesh)
 

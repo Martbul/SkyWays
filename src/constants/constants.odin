@@ -3,3 +3,7 @@ package constants
 
 SCREEN_WIDTH :: 1300
 SCREEN_HEIGHT :: 850
+
+MAP_DIFFUSE :: 0
+MAP_SPECULAR :: 1
+MAP_NORMAL :: 2

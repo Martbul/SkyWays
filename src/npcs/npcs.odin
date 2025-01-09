@@ -1,5 +1,6 @@
 package npcs
 
+import "../pkg"
 import "core:math"
 import rl "vendor:raylib"
 
@@ -101,6 +102,7 @@ update_npc :: proc(npc: ^NPC, player_pos: rl.Vector3, delta_time: f32) {
 
 
 draw_npc :: proc(npc: ^NPC) {
+	pkg.info("Creating NPC")
 	rl.DrawModel(npc.model, npc.position, 1.0, rl.WHITE)
 }
 

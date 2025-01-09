@@ -1,8 +1,7 @@
 package textures
+
+import "../constants"
 import rl "vendor:raylib"
-MAP_DIFFUSE :: 0
-MAP_SPECULAR :: 1
-MAP_NORMAL :: 2
 
 textured_cube: struct {
 	model:            rl.Model,
@@ -32,9 +31,9 @@ init_custom_material :: proc() {
 	)
 
 	material := &textured_cube.model.materials[0]
-	material.maps[MAP_DIFFUSE].texture = textured_cube.diffuse_texture
-	material.maps[MAP_SPECULAR].texture = textured_cube.specular_texture
-	material.maps[MAP_NORMAL].texture = textured_cube.normal_texture
+	material.maps[constants.MAP_DIFFUSE].texture = textured_cube.diffuse_texture
+	material.maps[constants.MAP_SPECULAR].texture = textured_cube.specular_texture
+	material.maps[constants.MAP_NORMAL].texture = textured_cube.normal_texture
 
 	textured_cube.is_loaded = true
 }

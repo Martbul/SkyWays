@@ -36,15 +36,12 @@ create_menu :: proc() -> Menu {
 		is_active = true,
 	}
 
-	fmt.print("--------LOADED MENU")
-	pkg.debug("Creating NPC")
 	return menu
 }
 
 update_menu :: proc(menu: ^Menu) -> bool {
 	mouse_pos := rl.GetMousePosition()
 
-	// Update selected option based on mouse position
 	menu.selected_option = -1
 	for i := 0; i < get_option_count(menu.state); i += 1 {
 		button_bounds := get_button_bounds(menu.button_rect, i)
@@ -82,15 +79,12 @@ draw_menu :: proc(menu: ^Menu) {
 	options := get_menu_options(menu.state)
 
 	for i := 0; i < len(options); i += 1 {
-		pkg.debug(options)
 		button_bounds := get_button_bounds(menu.button_rect, i)
 		button_color := menu.selected_option == i ? rl.SKYBLUE : rl.DARKBLUE
 
-		// Draw button background
 		rl.DrawRectangleRec(button_bounds, button_color)
 		rl.DrawRectangleLinesEx(button_bounds, 2, rl.WHITE)
 
-		// Draw button text
 		text_size := rl.MeasureText(fmt.caprint(options[i]), 20)
 		text_pos_x := i32(button_bounds.x + button_bounds.width / 2) - text_size / 2
 		text_pos_y := i32(button_bounds.y + button_bounds.height / 2 - 10)

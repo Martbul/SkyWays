@@ -1,5 +1,6 @@
 package npcs
 
+import "../constants"
 import "../pkg"
 import "core:math"
 import rl "vendor:raylib"
@@ -8,6 +9,7 @@ NPC :: struct {
 	position:             rl.Vector3,
 	rotation:             rl.Vector3,
 	model:                rl.Model,
+	textures:             []rl.Texture2D,
 	state:                NPCState,
 	patrol_points:        []rl.Vector3,
 	current_patrol_index: int,
@@ -30,8 +32,10 @@ Animation_State :: struct {
 	animation_count: int,
 }
 
+
 create_npc :: proc(
 	model_path: cstring,
+	texture_paths: []cstring,
 	initial_pos: rl.Vector3,
 	patrol_points: []rl.Vector3,
 	speed: f32 = 2.0,
@@ -39,6 +43,40 @@ create_npc :: proc(
 ) -> ^NPC {
 	npc := new(NPC)
 	npc.model = rl.LoadModel(model_path)
+
+	// Load and assign textures
+	npc.textures = make([]rl.Texture2D, len(texture_paths))
+
+	if int(npc.model.materialCount) > 0 {
+		material := &npc.model.materials[0] // We're working with material_0
+
+		for texture_path, i in texture_paths {
+			npc.textures[i] = rl.LoadTexture(texture_path)
+
+			// Assign each texture to the appropriate material map
+			switch i {
+			case 0:
+				// Diffuse texture
+				material.maps[constants.MAP_DIFFUSE].texture = npc.textures[i]
+				material.maps[constants.MAP_DIFFUSE].color = rl.WHITE
+			case 1:
+				// Occlusion texture (using normal map slot since there's no direct occlusion slot)
+				material.maps[constants.MAP_NORMAL].texture = npc.textures[i]
+				material.maps[constants.MAP_NORMAL].color = rl.WHITE
+			case 2:
+				// Specular texture
+				material.maps[constants.MAP_SPECULAR].texture = npc.textures[i]
+				material.maps[constants.MAP_SPECULAR].color = rl.WHITE
+			}
+		}
+
+
+		// Enable material features
+		material.maps[constants.MAP_DIFFUSE].color = rl.WHITE
+		material.maps[constants.MAP_NORMAL].color = rl.WHITE
+		material.maps[constants.MAP_SPECULAR].color = rl.WHITE
+	}
+
 	npc.position = initial_pos
 	npc.rotation = rl.Vector3{0, 0, 0}
 	npc.patrol_points = patrol_points
@@ -102,11 +140,14 @@ update_npc :: proc(npc: ^NPC, player_pos: rl.Vector3, delta_time: f32) {
 
 
 draw_npc :: proc(npc: ^NPC) {
-	pkg.info("Creating NPC")
 	rl.DrawModel(npc.model, npc.position, 1.0, rl.WHITE)
 }
 
 destroy_npc :: proc(npc: ^NPC) {
+	for texture in npc.textures {
+		rl.UnloadTexture(texture)
+	}
+	delete(npc.textures)
 	rl.UnloadModel(npc.model)
 	free(npc)
 }

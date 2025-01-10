@@ -31,6 +31,7 @@ main :: proc() {
 
 	defer rl.CloseWindow()
 
+	model := rl.LoadModel("assets/terrain/start_island/scene.gltf")
 	for !rl.WindowShouldClose() {
 		if game_state.menu.is_active {
 			if !menu.update_menu(&game_state.menu) {
@@ -41,7 +42,7 @@ main :: proc() {
 			menu.draw_menu(&game_state.menu)
 		} else {
 			update_game(&game_state)
-			render_game(&game_state)
+			render_game(&game_state, model)
 		}
 	}
 }
@@ -68,16 +69,33 @@ init_game :: proc() -> Game_State {
 		"assets/wooden_axe/wooden_axe.png",
 	)
 
-	// Initialize some example NPCs with patrol points
 	patrol_points := []rl.Vector3{{5, 0, 5}, {15, 0, 5}, {15, 0, 15}, {5, 0, 15}}
-
-	// Create and append NPCs to the game state
+	texture_paths_1 := []cstring {
+		"assets/models/bots/spartan/material_0_diffuse.jpeg",
+		"assets/models/bots/spartan/material_0_occlusion.png",
+		"assets/models/bots/spartan/material_0_specularGlossiness.png",
+	}
 	npc1 := npc.create_npc(
 		"assets/models/bots/spartan/scene.gltf",
+		texture_paths_1,
 		rl.Vector3{5, 0, 5},
 		patrol_points,
 	)
+	//texture_paths_2 := []cstring {
+	//	"assets/npc_diffuse.png", // Main color/diffuse texture
+	//	"assets/npc_normal.png", // Normal map (if using)
+	//	"assets/npc_specular.png", // Specular map (if using)
+	//}
+	//npc2 := npc.create_npc(
+	//	"assets/models/bots/ghost_cod/scene.gltf",
+	//	texture_paths_2,
+	//	rl.Vector3{5, 0, 5},
+	//	patrol_points,
+	//)
+
+
 	append(&game_state.npcs, npc1)
+	//	append(&game_state.npcs, npc2)
 
 	pl.spawn_item(game_state.item_manager, "wooden_axe", {7, 2, 4})
 	pl.spawn_item(game_state.item_manager, "wooden_knife", {9, 2, 8})
@@ -91,22 +109,20 @@ update_game :: proc(game_state: ^Game_State) {
 	pl.player_update(&game_state.player)
 	pl.update(game_state.item_manager)
 
-	// Update all NPCs
 	for npcInGameState in game_state.npcs {
 		npc.update_npc(npcInGameState, game_state.player.position, rl.GetFrameTime())
 	}
 
-	// Handle item pickup
 	if rl.IsKeyPressed(.E) {
 		pickup_range := f32(2.0)
 		picked_item := pl.pick_up_item(game_state.item_manager, &game_state.player, pickup_range)
-		if picked_item != nil {
-			// Add to player inventory or handle pickup
-		}
+		//if picked_item != nil {
+		// Add to player inventory or handle pickup
+		//	}
 	}
 }
 
-render_game :: proc(game_state: ^Game_State) {
+render_game :: proc(game_state: ^Game_State, model: rl.Model) {
 	camera := pkg.init_camera(&game_state.player)
 
 	rl.BeginDrawing()
@@ -117,11 +133,17 @@ render_game :: proc(game_state: ^Game_State) {
 	rl.BeginMode3D(camera)
 	{
 		tgen.init_terrain_instances()
+
+
+		position := rl.Vector3{20.0, -50.0, -10.0}
+		scale: f32 = 80
+		rl.DrawModel(model, position, scale, rl.WHITE)
+
+
 		pl.player_render(&game_state.player)
 		draw_game(&game_state.player)
 		pl.draw(game_state.item_manager)
 
-		// Draw all NPCs
 		for npcInGameState in game_state.npcs {
 			npc.draw_npc(npcInGameState)
 		}
@@ -172,7 +194,6 @@ cleanup_game :: proc(game_state: ^Game_State) {
 	pl.unload_player(&game_state.player)
 	pl.unload_resources(game_state.item_manager)
 
-	// Cleanup NPCs
 	for npcInGameState in game_state.npcs {
 		npc.destroy_npc(npcInGameState)
 	}

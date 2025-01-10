@@ -34,10 +34,10 @@ main :: proc() {
 	for !rl.WindowShouldClose() {
 		if game_state.menu.is_active {
 			if !menu.update_menu(&game_state.menu) {
-				fmt.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 				game_state.menu.is_active = false
 				continue
 			}
+
 			menu.draw_menu(&game_state.menu)
 		} else {
 			update_game(&game_state)

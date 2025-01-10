@@ -67,10 +67,8 @@ draw_menu :: proc(menu: ^Menu) {
 	rl.BeginDrawing()
 	defer rl.EndDrawing()
 
-	// Draw background
 	rl.DrawTexture(menu.background, 0, 0, rl.WHITE)
 
-	// Draw title
 	title_text: cstring = fmt.caprint("SkyWays")
 	title_pos := rl.Vector2 {
 		f32(
@@ -81,9 +79,10 @@ draw_menu :: proc(menu: ^Menu) {
 	}
 	rl.DrawTextEx(menu.title_font, title_text, title_pos, 60, 2, rl.WHITE)
 
-	// Draw menu options
 	options := get_menu_options(menu.state)
+
 	for i := 0; i < len(options); i += 1 {
+		pkg.debug(options)
 		button_bounds := get_button_bounds(menu.button_rect, i)
 		button_color := menu.selected_option == i ? rl.SKYBLUE : rl.DARKBLUE
 
@@ -97,21 +96,32 @@ draw_menu :: proc(menu: ^Menu) {
 		text_pos_y := i32(button_bounds.y + button_bounds.height / 2 - 10)
 		rl.DrawText(fmt.caprint(options[i]), text_pos_x, text_pos_y, 20, rl.WHITE)
 	}
+
+
 }
 
-get_menu_options :: proc(state: Menu_State) -> []string {
+get_menu_options :: proc(state: Menu_State, allocator := context.allocator) -> []string {
 	#partial switch state {
 	case .Main:
-		menuOptions := []string{"Start Game", "Options", "Credits", "Exit"}
-		return menuOptions
+		options := make([]string, 4, allocator)
+		options[0] = "Start Game"
+		options[1] = "Options"
+		options[2] = "Credits"
+		options[3] = "Exit"
+		return options
 	case .Options:
-		optionsOptions := []string{"Graphics", "Sound", "Controls", "Back"}
-		return optionsOptions
+		options := make([]string, 4, allocator)
+		options[0] = "Graphics"
+		options[1] = "Sound"
+		options[2] = "Controls"
+		options[3] = "Back"
+		return options
 	case .Credits:
-		backOption := []string{"Back"}
-		return backOption
+		options := make([]string, 1, allocator)
+		options[0] = "Back"
+		return options
 	}
-	return []string{}
+	return make([]string, 0, allocator)
 }
 
 get_option_count :: proc(state: Menu_State) -> int {

@@ -190,6 +190,8 @@ draw_game :: proc(player: ^pl.Player) {
 			terrain_models.draw_lonely_island(instance.position, instance.scale)
 		case .LibertyIsland:
 			terrain_models.draw_liberty_island(instance.position, instance.scale)
+		case .OldGarage:
+			terrain_models.draw_old_garage(instance.position, instance.scale)
 		}
 
 	}

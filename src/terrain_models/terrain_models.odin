@@ -8,6 +8,7 @@ terrain_elements :: struct {
 	starting_island: terrain_3d_model,
 	lonely_island:   terrain_3d_model,
 	liberty_island:  terrain_3d_model,
+	old_garage:      terrain_3d_model,
 }
 
 terrain_3d_model :: struct {
@@ -24,12 +25,14 @@ init_terrain_elements :: proc() {
 	init_starting_island()
 	init_lonely_island()
 	init_liberty_island()
+	init_old_garage()
 }
 
 cleanup_terrain_elements :: proc() {
 	cleanup_starting_island()
 	cleanup_lonely_island()
 	cleanup_liberty_island()
+	cleanup_old_garage()
 }
 
 
@@ -51,6 +54,13 @@ init_liberty_island :: proc() {
 	if terrain.liberty_island.is_loaded do return
 
 	init_model(&terrain.liberty_island, "assets/terrain/liberty_island/scene.gltf")
+}
+
+
+init_old_garage :: proc() {
+	if terrain.old_garage.is_loaded do return
+
+	init_model(&terrain.old_garage, "assets/terrain/old_garage/scene.gltf")
 }
 
 
@@ -86,6 +96,11 @@ draw_liberty_island :: proc(position: rl.Vector3, scale: f32) {
 		rl.DrawModel(terrain.liberty_island.model, position, scale, rl.WHITE)
 	}
 }
+draw_old_garage :: proc(position: rl.Vector3, scale: f32) {
+	if terrain.old_garage.is_loaded {
+		rl.DrawModel(terrain.old_garage.model, position, scale, rl.WHITE)
+	}
+}
 
 
 cleanup_starting_island :: proc() {
@@ -100,6 +115,11 @@ cleanup_lonely_island :: proc() {
 
 cleanup_liberty_island :: proc() {
 	cleanup_3d_model(&terrain.liberty_island)
+}
+
+
+cleanup_old_garage :: proc() {
+	cleanup_3d_model(&terrain.old_garage)
 }
 
 cleanup_3d_model :: proc(model: ^terrain_3d_model) {

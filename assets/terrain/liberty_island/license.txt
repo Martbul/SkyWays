@@ -1,0 +1,11 @@
+Model Information:
+* title:	liberty island
+* source:	https://sketchfab.com/3d-models/liberty-island-5ca0a6d2b7694b678581233ff26d4f3a
+* author:	SPLEEN VISION (https://sketchfab.com/spleen.vision)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "liberty island" (https://sketchfab.com/3d-models/liberty-island-5ca0a6d2b7694b678581233ff26d4f3a) by SPLEEN VISION (https://sketchfab.com/spleen.vision) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

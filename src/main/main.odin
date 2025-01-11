@@ -8,6 +8,7 @@ import "../pkg"
 import pl "../player"
 import "../shared"
 import tgen "../terrain_generation"
+import "../terrain_models"
 import "../textures"
 import "core:fmt"
 import "core:log"
@@ -24,14 +25,13 @@ Game_State :: struct {
 main :: proc() {
 	rl.InitWindow(constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT, "SkyWays")
 	game_state := init_game()
+
 	pkg.init()
 	defer pkg.destroy()
 
 	defer cleanup_game(&game_state)
-
 	defer rl.CloseWindow()
 
-	model := rl.LoadModel("assets/terrain/start_island/scene.gltf")
 	for !rl.WindowShouldClose() {
 		if game_state.menu.is_active {
 			if !menu.update_menu(&game_state.menu) {
@@ -42,7 +42,7 @@ main :: proc() {
 			menu.draw_menu(&game_state.menu)
 		} else {
 			update_game(&game_state)
-			render_game(&game_state, model)
+			render_game(&game_state)
 		}
 	}
 }
@@ -50,10 +50,10 @@ main :: proc() {
 
 init_game :: proc() -> Game_State {
 	perf.init_performance_tracking()
-	textures.init_custom_material()
-	textures.init_terrain_elements()
-	textures.init_concrete_elements()
-
+	//	textures.init_custom_material()
+	//	textures.init_terrain_elements()
+	//	textures.init_concrete_elements()
+	terrain_models.init_terrain_elements()
 	game_state := Game_State {
 		player       = pl.init_player(),
 		item_manager = pl.init_item_manager(),
@@ -122,7 +122,7 @@ update_game :: proc(game_state: ^Game_State) {
 	}
 }
 
-render_game :: proc(game_state: ^Game_State, model: rl.Model) {
+render_game :: proc(game_state: ^Game_State) {
 	camera := pkg.init_camera(&game_state.player)
 
 	rl.BeginDrawing()
@@ -133,11 +133,6 @@ render_game :: proc(game_state: ^Game_State, model: rl.Model) {
 	rl.BeginMode3D(camera)
 	{
 		tgen.init_terrain_instances()
-
-
-		position := rl.Vector3{20.0, -50.0, -10.0}
-		scale: f32 = 80
-		rl.DrawModel(model, position, scale, rl.WHITE)
 
 
 		pl.player_render(&game_state.player)
@@ -164,7 +159,10 @@ render_game :: proc(game_state: ^Game_State, model: rl.Model) {
 draw_game :: proc(player: ^pl.Player) {
 	textures.draw_custom_material()
 	for instance in shared.Terrain_instances {
-		log.info(instance)
+		for instance in shared.Terrain_instances {
+			// Draw the current collision boxes to debug
+			rl.DrawBoundingBox(instance.bounds, rl.GREEN)
+		}
 		switch instance.model_type {
 		case .RockyCube:
 			textures.draw_rocky_cube(instance.position, instance.scale)
@@ -186,7 +184,14 @@ draw_game :: proc(player: ^pl.Player) {
 			textures.draw_concrete_wall(instance.position, instance.scale)
 		case .ConcretePillar:
 			textures.draw_concrete_pillar(instance.position, instance.scale)
+		case .StartingIsland:
+			terrain_models.draw_starting_island(instance.position, instance.scale)
+		case .LonelyIsland:
+			terrain_models.draw_lonely_island(instance.position, instance.scale)
+		case .LibertyIsland:
+			terrain_models.draw_liberty_island(instance.position, instance.scale)
 		}
+
 	}
 }
 

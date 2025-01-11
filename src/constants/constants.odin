@@ -1,8 +1,8 @@
 package constants
 
 //Screen
-SCREEN_WIDTH :: 1300
-SCREEN_HEIGHT :: 850
+SCREEN_WIDTH :: 1920
+SCREEN_HEIGHT :: 1080
 
 //Texture maps
 MAP_DIFFUSE :: 0

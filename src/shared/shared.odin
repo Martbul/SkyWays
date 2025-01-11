@@ -4,6 +4,7 @@ import rl "vendor:raylib"
 
 
 TerrainInstance :: struct {
+	model:      rl.Model,
 	model_type: TerrainType,
 	position:   rl.Vector3,
 	scale:      f32,
@@ -27,9 +28,16 @@ RockyTerrainType :: enum {
 	TerrainPillar,
 }
 
+model_starting_island :: enum {
+	StartingIsland,
+	LonelyIsland,
+	LibertyIsland,
+}
+
 TerrainType :: union {
 	RockyTerrainType,
 	ConcreteTerrainType,
+	model_starting_island,
 }
 
 Terrain_instances: [dynamic]TerrainInstance

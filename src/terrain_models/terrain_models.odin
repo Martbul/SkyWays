@@ -13,18 +13,30 @@ terrain_elements :: struct {
 }
 
 terrain_3d_model :: struct {
-	model:        rl.Model,
-	bounding_box: rl.BoundingBox,
-	is_loaded:    bool,
+	model:           rl.Model,
+	bounding_box:    rl.BoundingBox,
+	is_loaded:       bool,
+	collision_boxes: [dynamic]Terrain_Collision_Box,
 }
 
+
+Terrain_Collision_Box :: struct {
+	box:      rl.BoundingBox,
+	position: rl.Vector3, // Relative position to model origin
+	type:     Terrain_Box_Type,
+}
+
+Terrain_Box_Type :: enum {
+	Ground,
+	Obstacle,
+	Wall,
+}
 
 terrain: terrain_elements
 
 
 init_terrain_elements :: proc() {
 	//	init_starting_island()
-	//	init_lonely_island()
 	//	init_liberty_island()
 	init_old_garage()
 	init_room_99()
@@ -32,7 +44,6 @@ init_terrain_elements :: proc() {
 
 cleanup_terrain_elements :: proc() {
 	//	cleanup_starting_island()
-	//	cleanup_lonely_island()
 	//	cleanup_liberty_island()
 	cleanup_old_garage()
 	cleanup_room_99()
@@ -43,13 +54,6 @@ init_starting_island :: proc() {
 	if terrain.starting_island.is_loaded do return
 
 	init_model(&terrain.starting_island, "assets/terrain/start_island/untitled.glb")
-}
-
-
-init_lonely_island :: proc() {
-	if terrain.lonely_island.is_loaded do return
-
-	init_model(&terrain.lonely_island, "assets/terrain/lonely_island/scene.gltf")
 }
 
 
@@ -93,13 +97,6 @@ draw_starting_island :: proc(position: rl.Vector3, scale: f32) {
 }
 
 
-draw_lonely_island :: proc(position: rl.Vector3, scale: f32) {
-	if terrain.lonely_island.is_loaded {
-		rl.DrawModel(terrain.lonely_island.model, position, scale, rl.WHITE)
-	}
-}
-
-
 draw_liberty_island :: proc(position: rl.Vector3, scale: f32) {
 	if terrain.liberty_island.is_loaded {
 		rl.DrawModel(terrain.liberty_island.model, position, scale, rl.WHITE)
@@ -123,11 +120,6 @@ draw_room_99 :: proc(position: rl.Vector3, scale: f32) {
 
 cleanup_starting_island :: proc() {
 	cleanup_3d_model(&terrain.starting_island)
-}
-
-
-cleanup_lonely_island :: proc() {
-	cleanup_3d_model(&terrain.lonely_island)
 }
 
 

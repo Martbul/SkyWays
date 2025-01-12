@@ -27,8 +27,8 @@ init_terrain_instances :: proc() {
 		shared.TerrainInstance {
 			model_type = .Room99,
 			model = terrain_models.terrain.room_99.model,
-			position = rl.Vector3{0.0, 8.3, 0.0},
-			scale = 2.0,
+			position = rl.Vector3{100.0, 1.24, 100.0},
+			scale = 5.0,
 			bounds = rl.BoundingBox{},
 		},
 	)

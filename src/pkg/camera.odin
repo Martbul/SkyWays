@@ -4,7 +4,7 @@ import pl "../player"
 import rl "vendor:raylib"
 
 init_camera :: proc(player: ^pl.Player) -> rl.Camera3D {
-	cameraDistance: f32 = 5.0
+	cameraDistance: f32 = 7.0
 	cameraHeight: f32 = 6.6
 
 	rotationAngle := f32(rl.PI * -2)

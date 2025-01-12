@@ -30,7 +30,6 @@ RockyTerrainType :: enum {
 
 model_starting_island :: enum {
 	StartingIsland,
-	LonelyIsland,
 	LibertyIsland,
 	OldGarage,
 	Room99,

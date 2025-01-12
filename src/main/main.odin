@@ -186,8 +186,6 @@ draw_game :: proc(player: ^pl.Player) {
 			textures.draw_concrete_pillar(instance.position, instance.scale)
 		case .StartingIsland:
 			terrain_models.draw_starting_island(instance.position, instance.scale)
-		case .LonelyIsland:
-			terrain_models.draw_lonely_island(instance.position, instance.scale)
 		case .LibertyIsland:
 			terrain_models.draw_liberty_island(instance.position, instance.scale)
 		case .OldGarage:

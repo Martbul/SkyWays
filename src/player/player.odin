@@ -47,7 +47,7 @@ MovableDirection :: enum {
 
 init_player :: proc() -> Player {
 	player := Player {
-		position          = rl.Vector3{0, 5, 0},
+		position          = rl.Vector3{100, 5, 100},
 		previous_position = rl.Vector3{0, 5, 0},
 		health            = 100,
 		gold              = 1,

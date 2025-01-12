@@ -29,7 +29,7 @@ init_camera :: proc(player: ^pl.Player) -> rl.Camera3D {
 	camera := rl.Camera3D {
 		position   = cameraPosition,
 		target     = player.position,
-		up         = rl.Vector3{0.0, 1.0, 0.0},
+		up         = rl.Vector3{0.0, 0.0, -5.0},
 		fovy       = 95.0,
 		projection = .PERSPECTIVE,
 	}

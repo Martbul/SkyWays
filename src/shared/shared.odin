@@ -33,6 +33,7 @@ model_starting_island :: enum {
 	LonelyIsland,
 	LibertyIsland,
 	OldGarage,
+	Room99,
 }
 
 TerrainType :: union {

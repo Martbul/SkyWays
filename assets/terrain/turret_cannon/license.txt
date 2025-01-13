@@ -1,0 +1,11 @@
+Model Information:
+* title:	Sentry Turret - 'Darwin' Auto Cannon
+* source:	https://sketchfab.com/3d-models/sentry-turret-darwin-auto-cannon-17840b0ce9754d78b0610e525a7a7ef5
+* author:	seangorman (https://sketchfab.com/seangorman)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Sentry Turret - 'Darwin' Auto Cannon" (https://sketchfab.com/3d-models/sentry-turret-darwin-auto-cannon-17840b0ce9754d78b0610e525a7a7ef5) by seangorman (https://sketchfab.com/seangorman) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

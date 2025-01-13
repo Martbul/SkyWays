@@ -1,0 +1,11 @@
+Model Information:
+* title:	Cannon Tower
+* source:	https://sketchfab.com/3d-models/cannon-tower-06241ec1b6e3480eb88819369ceb3d11
+* author:	tylerlherring (https://sketchfab.com/tylerlherring)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Cannon Tower" (https://sketchfab.com/3d-models/cannon-tower-06241ec1b6e3480eb88819369ceb3d11) by tylerlherring (https://sketchfab.com/tylerlherring) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

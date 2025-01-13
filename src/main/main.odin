@@ -161,7 +161,10 @@ draw_game :: proc(player: ^pl.Player) {
 	for instance in shared.Terrain_instances {
 		for instance in shared.Terrain_instances {
 			// Draw the current collision boxes to debug
-			rl.DrawBoundingBox(instance.bounds, rl.GREEN)
+			for collision_box in instance.collision_boxes {
+				pkg.debug(collision_box.position)
+				rl.DrawBoundingBox(collision_box.box, rl.RED)
+			}
 		}
 		switch instance.model_type {
 		case .RockyCube:
@@ -192,6 +195,8 @@ draw_game :: proc(player: ^pl.Player) {
 			terrain_models.draw_old_garage(instance.position, instance.scale)
 		case .Room99:
 			terrain_models.draw_room_99(instance.position, instance.scale)
+		case .portal:
+			terrain_models.draw_portal(instance.position, instance.scale)
 		}
 
 	}

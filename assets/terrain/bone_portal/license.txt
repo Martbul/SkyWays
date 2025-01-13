@@ -1,0 +1,11 @@
+Model Information:
+* title:	Bone Portal
+* source:	https://sketchfab.com/3d-models/bone-portal-54b1a5e235f94c9ca3244da6f0e7940f
+* author:	Gabrieltim3D (https://sketchfab.com/qaztimlim)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Bone Portal" (https://sketchfab.com/3d-models/bone-portal-54b1a5e235f94c9ca3244da6f0e7940f) by Gabrieltim3D (https://sketchfab.com/qaztimlim) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

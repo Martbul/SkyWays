@@ -2,13 +2,13 @@ package shared
 
 import rl "vendor:raylib"
 
-
 TerrainInstance :: struct {
-	model:      rl.Model,
-	model_type: TerrainType,
-	position:   rl.Vector3,
-	scale:      f32,
-	bounds:     rl.BoundingBox,
+	model:           rl.Model,
+	model_type:      TerrainType,
+	position:        rl.Vector3,
+	scale:           f32,
+	bounds:          rl.BoundingBox,
+	collision_boxes: [dynamic]terrain_collision_box,
 }
 
 ConcreteTerrainType :: enum {
@@ -20,6 +20,19 @@ ConcreteTerrainType :: enum {
 }
 
 
+terrain_box_type :: enum {
+	Ground,
+	Obstacle,
+	Wall,
+}
+
+terrain_collision_box :: struct {
+	box:      rl.BoundingBox,
+	position: rl.Vector3, // Relative position to model origin
+	type:     terrain_box_type,
+}
+
+
 RockyTerrainType :: enum {
 	RockyCube,
 	IslandPlatform,
@@ -28,17 +41,24 @@ RockyTerrainType :: enum {
 	TerrainPillar,
 }
 
-model_starting_island :: enum {
+terrain_3d_models :: enum {
 	StartingIsland,
 	LibertyIsland,
 	OldGarage,
 	Room99,
 }
 
+terrain_3d_structures :: enum {
+	portal,
+	tower_cannon,
+	turret_cannon,
+}
+
 TerrainType :: union {
 	RockyTerrainType,
 	ConcreteTerrainType,
-	model_starting_island,
+	terrain_3d_models,
+	terrain_3d_structures,
 }
 
 Terrain_instances: [dynamic]TerrainInstance

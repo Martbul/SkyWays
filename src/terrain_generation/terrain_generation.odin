@@ -9,7 +9,6 @@ import rl "vendor:raylib"
 init_terrain_instances :: proc() {
 	shared.Terrain_instances = make([dynamic]shared.TerrainInstance)
 
-	//TODO: Think about how to structure the bounding boxes for every item in each room
 	append(
 		&shared.Terrain_instances,
 		shared.TerrainInstance {
@@ -29,9 +28,23 @@ init_terrain_instances :: proc() {
 			model = terrain_models.terrain.room_99.model,
 			position = rl.Vector3{100.0, 1.24, 100.0},
 			scale = 5.0,
-			bounds = rl.BoundingBox{},
+			collision_boxes = terrain_models.terrain.room_99.collision_boxes,
 		},
 	)
+
+
+	append(
+		&shared.Terrain_instances,
+		shared.TerrainInstance {
+			model_type = .portal,
+			model = terrain_models.terrain.portal.model,
+			position = rl.Vector3{100.0, 1.24, 100.0},
+			scale = 0.3,
+			bounds = scaled_bounds(terrain_models.terrain.portal.bounding_box^, 5, 1.0),
+		},
+	)
+
+
 }
 
 cleanup_terrain_instances :: proc() {
